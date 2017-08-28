@@ -5,19 +5,68 @@ function Blackjack() {
 
 }
 
+
 Blackjack.prototype.getRoot = function() {
     var output = document.getElementById("output");
     return output;
+}
+
+
+
+Blackjack.prototype.startGame = function(options) {
+    // console.log(options)
+    deck = options.deck;
+
+    deck.createDeck();
+    deck.shuffleDeck(deck.cards);
+    deck.outputCards();
 
 }
 
-Blackjack.prototype.createDeck = function() {
+Deck.prototype.shuffleDeck = function(array) {
+    console.log(array);
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = array[i];
+        array[i] = array[j];
+        array[j] = tmp;
+
+    }
+    return array;
+
+}
+
+Deck.prototype.outputCards = function() {
+    var cards = this.cards;
+    var bgcolor = this.bgcolor;
+    console.log(bgcolor)
+    var randomNum = random();
+    output.innerHTML += "<span style='color:" + cards[0].bgcolor + "'>&" + cards[0].icon + ";" + cards[0].cardnum + "</span>  ";
+    console.log(output.innerHTML)
+
+}
+
+
+Blackjack.prototype.buttonHandler = function() {
+    var button = document.getElementById("btn-start");
+    var that = this;
+    button.onclick = function() {
+        that.startGame(options);
+    }
+}
+
+function Deck(cards, suits, numb) {
+    Blackjack.call(this, cards, suits, numb);
+    //new properties
+}
+
+
+Deck.prototype.createDeck = function() {
     var suits = this.suits;
     var numb = this.numb;
     var cards = this.cards
     for (s in suits) {
         var suit = suits[s][0].toUpperCase();
-        console.log(suit);
         var bgcolor = (suit == "S" || suit == "C") ? "black" : "red";
 
         for (n in numb) {
@@ -33,49 +82,6 @@ Blackjack.prototype.createDeck = function() {
         }
     }
 
-}
-
-
-Blackjack.prototype.startGame = function() {
-
-    this.createDeck();
-    this.outputCards();
-    this.shuffleDeck(this.cards);
-    this.outputCards();
-
-
-}
-
-Blackjack.prototype.shuffleDeck = function(array) {
-    console.log(array);
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = array[i];
-        array[i] = array[j];
-        array[j] = tmp;
-
-    }
-    return array;
-
-}
-
-Blackjack.prototype.outputCards = function() {
-    var cards = this.cards;
-    var bgcolor = this.bgcolor;
-    console.log(bgcolor)
-    var randomNum = random();
-    output.innerHTML += "<span style='color:" + cards[0].bgcolor + "'>&" + cards[0].icon + ";" + cards[0].cardnum + "</span>  ";
-    console.log(output.innerHTML)
-
-}
-
-
-Blackjack.prototype.buttonHandler = function() {
-    var button = document.getElementById("btn-start");
-    var that = this;
-    button.onclick = function() {
-        that.startGame();
-    }
 }
 
 //function random
@@ -98,9 +104,16 @@ function Player() {
 
 }
 
+
+
+
 Player.prototype = Object.create(Blackjack.prototype);
 Player.prototype.constructor = Player;
 
-var bj = new Blackjack()
+var options = {
+    deck: new Deck()
+};
+
+var bj = new Blackjack(options)
 
 bj.buttonHandler();
