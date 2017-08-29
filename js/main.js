@@ -3,6 +3,9 @@ function Blackjack() {
     this.suits = ["spades", "hearts", "clubs", "diams"];
     this.numb = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
     this.cardCount = 0;
+    this.playerCoins = 1000;
+
+    this.message = document.getElementById("message");
 
     this.output = document.getElementById("output");
 
@@ -24,10 +27,14 @@ Blackjack.prototype.startGame = function(options) {
 
     this.newGame(options); //pass argument for set newGame
 
+    document.getElementById('btnStart').style.display = "none";
+
+    document.getElementById('playerCoins').innerHTML = this.playerCoins;
+
 }
 
 Blackjack.prototype.buttonHandler = function() {
-    var button = document.getElementById("btn-start");
+    var button = document.getElementById("btnStart");
     var that = this;
     button.onclick = function() {
         that.startGame(options);
@@ -35,37 +42,54 @@ Blackjack.prototype.buttonHandler = function() {
 }
 
 Blackjack.prototype.newGame = function(options) {
-  //from options because of i need the property of the object, NB if i take this.cards i will take empty value
-  var deck = options.deck;
-  var cards = options.deck.cards;
-  var cardCount = options.deck.cardCount;
-  
-  var playerCard = [];//
-  var dealerCard = [];//
 
-  console.log(playerCard, dealerCard)
+    //money - bet
+    var betValue = document.getElementById("playerBet").value;
 
-  dealerHolder.innerHTML = '';
-  playerHolder.innerHTML = '';
+    this.playerCoins = this.playerCoins - betValue;
+    document.getElementById("playerCoins").innerHTML = this.playerCoins;
+    var style = document.getElementById("playerActions").style.display = "block";
+    console.log(style)
+    this.message.innerHTML = "Get 21 or higher then dealer <br> your bet is: €" + betValue + "";
+    //disable input
+    document.getElementById("playerBet").disabled = true;
+    document.getElementById("maxBet").disabled = true;
+    console.log(this.playerCoins)
 
-  for (var i = 0; i < 2; i++) {
+    this.newBet(options);
 
-    dealerCard.push(cards[cardCount]);
-    dealerHolder.innerHTML += deck.outputCards(cardCount, i);
-    if (i == 0) {
-        dealerHolder.innerHTML += '<div id="cover" style="left:100px;"></div>';
+}
+
+Blackjack.prototype.newBet = function(options) {
+    //from options because of i need the property of the object, NB if i take this.cards i will take empty value
+    var deck = options.deck;
+    var cards = options.deck.cards;
+    var cardCount = options.deck.cardCount;
+
+    var playerCard = []; //
+    var dealerCard = []; //
+
+    dealerHolder.innerHTML = '';
+    playerHolder.innerHTML = '';
+
+    for (var i = 0; i < 2; i++) {
+
+        dealerCard.push(cards[cardCount]);
+        dealerHolder.innerHTML += deck.outputCards(cardCount, i);
+        if (i == 0) {
+            dealerHolder.innerHTML += '<div id="cover" style="left:100px;"></div>';
+        }
+        cardCount++;
+
+        playerCard.push(cards[cardCount]);
+        playerHolder.innerHTML += deck.outputCards(cardCount, i);
+        cardCount++;
+
+        console.log(cardCount)
+        console.log(dealerCard);
+        console.log(playerCard);
+
     }
-    cardCount ++;
-
-    playerCard.push(cards[cardCount]);
-    playerHolder.innerHTML += deck.outputCards(cardCount, i);
-    cardCount ++;
-
-    console.log(cardCount)
-    console.log(dealerCard);
-    console.log(playerCard);
-    
-  }
 
 }
 
@@ -91,7 +115,7 @@ Deck.prototype.outputCards = function(count, pos) {
     var cards = this.cards;
     console.log(output.innerHTML)
     return '<div class="icard ' + cards[count].icon + '" style="left:' + pos + 'px;"> <div class="top-card suit">' + cards[count].cardnum + '<br></div>  <div class="content-card suit"></div>  <div class="bottom-card suit">' + cards[count].cardnum + '<br></div> </div>';
-    
+
 }
 
 Deck.prototype.createDeck = function() {
@@ -117,6 +141,7 @@ Deck.prototype.createDeck = function() {
 
 }
 
+
 //function random
 function random() {
     return Math.floor((Math.random() * 52));
@@ -125,7 +150,7 @@ function random() {
 
 //Dealer constructor
 function Dealer() {
-  this.dealerCard = [];
+    this.dealerCard = [];
 }
 
 Dealer.prototype = Object.create(Blackjack.prototype);
@@ -138,7 +163,7 @@ Dealer.prototype.constructor = Dealer;
 
 //Player constructor
 function Player() {
-  this.playerCard = [];
+    this.playerCard = [];
 }
 
 Player.prototype = Object.create(Blackjack.prototype);

@@ -1,19 +1,22 @@
+body{
+  font: normal 400 20px "Arial", sans-serif;
+}
+
 #output {
       font-size: 1.5em;
     }
 
-    #btndeal,
-    #myactions {
+    #btnDeal,
+    #playerActions {
       display: none;
     }
 
     .btn {
       border-radius: 5px;
-      padding: 8px 20px;
+      padding: 6px 15px;
       color: white;
       display: inline-block;
       text-align: center;
-      font: normal 700 24px "Arial", sans-serif;
       background-color: #111;
     }
 
@@ -102,23 +105,23 @@
       text-align: center;
     }
 
-    #btnhold {
+    #btnHold {
       background-color: green;
     }
 
-    #btnhit {
+    #btnHit {
       background-color: red;
     }
 
-    #btndouble {
+    #btnDouble {
       background-color: blue;
     }
 
-    #maxbet {
+    #maxBet {
       background-color: red;
     }
 
-    #btnstart {
+    #btnStart {
       background-color: #111;
     }
 
