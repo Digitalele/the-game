@@ -13,9 +13,9 @@ function Blackjack(numberOfPlayers) {
   this.dealerCardsCount = 0;
 
   this.dealerCardsCount2 = {
-    optionOne : 0
+    optionOne : 0,
     optionTwo : 0
-  }
+  };
 
   //message
   this.message = document.getElementById("message");
@@ -73,6 +73,14 @@ Blackjack.prototype.buttonHit = function() {
   }
 }
 
+Blackjack.prototype.buttonStand = function() {
+  var button = document.getElementById("btnHold");
+  var that = this;
+  button.onclick = function() {
+    that.playerActions("stand");
+  }
+}
+
 
 
 Blackjack.prototype.newGame = function() {
@@ -84,7 +92,7 @@ Blackjack.prototype.newGame = function() {
 
   var style = document.getElementById("playerActions").style.display = "block";
 
-  this.message.innerHTML = "Get 21 or higher then dealer <br> your bet is: €" + betValue + "";
+  this.message.innerHTML = "Get 21 or higher than dealer <br> your bet is: €" + betValue + "";
 
   //disable input
   document.getElementById("playerBet").disabled = true;
@@ -112,6 +120,8 @@ Blackjack.prototype.firstHand = function() {
     this.playersList[0].hand.push(this.cards.shift());
     this.playerHolder.innerHTML += this.drawCards(this.playersList[0].hand[i], this.playersList[0].hand.length);
     this.countCards(false, this.playersList[0].hand[i]);
+
+    this.playerValue.innerHTML = this.playersList[0].cardsCount;
   }
   console.log('dealer hand', this.dealerHand)
   console.log('player hand', this.playersList)
@@ -151,8 +161,59 @@ Blackjack.prototype.countCards = function(dealer, card) {
       dealer ? this.dealerCardsCount += parseInt(card.name) : this.playersList[0].cardsCount += parseInt(card.name);
       break;
   }
+
   console.log('this.dealerCardsCount', this.dealerCardsCount);
   console.log('this.playersList[0].cardsCount', this.playersList[0].cardsCount);
+  this.playersList[0].cardsCount > 21 ? this.gameOver() : false;
+}
+Blackjack.prototype.asCase = function(currentHand){
+  
+}
+
+Blackjack.prototype.gameOver = function() {
+  // if(this.playersList[0].cardsCount === 21 || this.playersList[0].cardsCount){
+
+  // }
+  console.log('LOSER');
+}
+
+Blackjack.prototype.checkForTheWinner = function() {
+  console.log('checking winner');
+  // var playervalue = countCards(false, this.playersList[0].hand[i]);
+  // if (playervalue === 21 && this.playersList[0].hand.length == 2) {
+  //   this.message.innerHTML = "Player Blackjack";
+  // }
+}
+
+
+Blackjack.prototype.dealerHit = function() {
+  console.log('hit')
+
+
+  var newCard = this.cards.shift();
+  
+  this.dealerHand.push(newCard);
+
+  //print cards
+  console.log(this.playersList[0]);
+
+  var cardPosition = this.dealerHand.length-1;
+  this.dealerHolder.innerHTML += this.drawCards(this.dealerHand[cardPosition], this.dealerHand.length);
+  this.countCards(false, this.dealerHand[cardPosition]);
+
+
+  //increment value
+  this.dealerValue.innerHTML = this.dealerCardsCount;
+
+  
+}
+
+
+Blackjack.prototype.stand = function() {
+  //  while (this.dealerCardsCount < 17) {
+  //   this.dealerHit()
+  // }
+  
 }
 
 
@@ -169,9 +230,6 @@ Blackjack.prototype.hit = function() {
   this.playerHolder.innerHTML += this.drawCards(this.playersList[0].hand[cardPosition], this.playersList[0].hand.length);
   this.countCards(false, this.playersList[0].hand[cardPosition]);
 
-  // switch that return case values
-  var card = this.asCase(newCard.name);
-  this.playersList[0].cardsCount += card;
 
   //increment value
   this.playerValue.innerHTML = this.playersList[0].cardsCount;
@@ -188,7 +246,8 @@ Blackjack.prototype.playerActions = function(action) {
     break;
 
     case 'stand':
-    playEnd();
+    this.dealerHit();
+    //playEnd();
     break;
 
     case 'double':
@@ -199,16 +258,6 @@ Blackjack.prototype.playerActions = function(action) {
     default:
     console.log('default');
     playEnd();
-  }
-}
-
-Blackjack.prototype.asCase = function(currentHand){
-
-  switch(currentHand){
-    case 'A': 
-      console.log('a'); return 11;
-      break;
-    default: return currentHand;
   }
 }
 
@@ -279,5 +328,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
   //handler
   bj.buttonStart();
   bj.buttonHit(); 
+  bj.buttonStand();
 
 });
