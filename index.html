@@ -8,26 +8,26 @@
 </head>
 
 <body>
-    <div>
+    <section>
         <div id="message">Press Start</div>
         <div id="button">
             <button id="btnStart" class="btn" type="button">
                 Start
             </button>
         </div>
-        <div class="total">Total € <span id="playerCoins">1000</span></div>
+        <div class="total">Total € <span id="playerCoins">0</span></div>
         <div>Bet total
         	<input  id="playerBet" type="number" value="0" min="1" max="1000">
         	<button id="maxBet" type="button" onclick="" class="btn">Max Bet</button>
         </div>
         
-    </div>
-    <div id="output">
+    </section>
+    <section id="board">
 
     	Dealer Hand: <span id="dValue"></span>
     	<div id="dealerHolder"></div>
  
-    	Player Hand: <span id="dValue"></span>
+    	Player Hand: <span id="pValue"></span>
     	<div id="playerHolder"></div>
 
     	<div id="playerActions">
@@ -36,7 +36,7 @@
     		<button id="btnDouble" type="button" class="btn" onclick="">Double</button>
     	</div>
     	<button id="btnDeal" class="btn" onclick="dealNew()">Deal</button>
-    </div>
+    </section>
 </body>
 <script src="js/main.js"></script>
 </html>

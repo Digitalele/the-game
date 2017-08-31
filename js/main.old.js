@@ -3,6 +3,8 @@
 
 function Blackjack(numberOfPlayers) {
   this.cards = [];
+  this.suits = ["spades", "hearts", "clubs", "diams"];
+  this.numb = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
 
   this.numberOfPlayers = numberOfPlayers;
 
@@ -11,11 +13,6 @@ function Blackjack(numberOfPlayers) {
   this.dealerHand = [];
 
   this.dealerCardsCount = 0;
-
-  this.dealerCardsCount2 = {
-    optionOne : 0
-    optionTwo : 0
-  }
 
   //message
   this.message = document.getElementById("message");
@@ -39,7 +36,7 @@ Blackjack.prototype.startGame = function() {
   this.deck = new Deck();
 
   this.deck.createDeck();
-  this.cards = this.deck.shuffleDeck(this.deck.cards);
+  this.deck.shuffleDeck(this.deck.cards);
 
   this.sitPlayers();
   this.newGame();
@@ -53,6 +50,7 @@ Blackjack.prototype.sitPlayers = function() {
     var numberOfChips = 15000;
     this.playersList.push(new Player(numberOfChips));
   }
+  console.log('this.playersList', this.playersList);
 }
 
 
@@ -78,7 +76,8 @@ Blackjack.prototype.buttonHit = function() {
 Blackjack.prototype.newGame = function() {
   
   var betValue = document.getElementById("playerBet").value;
-
+  
+  console.log('this.playersList', this.playersList[0]);
   this.playersList[0].chips -= betValue;
   this.playerHolder.innerHTML = this.playersList[0].chips;
 
@@ -90,6 +89,8 @@ Blackjack.prototype.newGame = function() {
   document.getElementById("playerBet").disabled = true;
   document.getElementById("maxBet").disabled    = true;
 
+  console.log('this.playerCoins',this.playerCoins);
+
   this.firstHand();
 }
 
@@ -100,84 +101,24 @@ Blackjack.prototype.firstHand = function() {
 
   // check later
   //this.dealerHolder.innerHTML += '<div id="cover" style="left:100px;"></div>';
+
   for (var i = 0; i < 2; i++) {
 
     // Dealer HAND
-    this.dealerHand.push(this.cards.shift());
-    this.dealerHolder.innerHTML += this.drawCards(this.dealerHand[i], this.dealerHand.length);
-    this.countCards(true, this.dealerHand[i]);
-    console.log();
+    this.dealerHand.push(this.deck.cards.shift());
+    this.dealerHolder.innerHTML += this.deck.outputCards(this.dealerCardsCount, i);
+    
+    console.log('dealer hand', this.dealerHand)
 
     // PLAYER HAND
-    this.playersList[0].hand.push(this.cards.shift());
-    this.playerHolder.innerHTML += this.drawCards(this.playersList[0].hand[i], this.playersList[0].hand.length);
-    this.countCards(false, this.playersList[0].hand[i]);
+    this.playersList[0].hand.push(this.deck.cards.shift());
+    console.log('player hand', this.playersList)
+
+
+    this.playerHolder.innerHTML += this.deck.outputCards(this.playersList[0].cardsCount, i);
+    
   }
-  console.log('dealer hand', this.dealerHand)
-  console.log('player hand', this.playersList)
 }
-
-
-Blackjack.prototype.drawCards = function(card, position) {
-    var position = (position > 0) ? position * 60 + 100 : 100;
-    //console.log('this.cards',this.cards);
-   
-    return `
-      <div class="icard ${card.icon}" style="left:${position}px;">
-        <div class="top-card suit">${card.name}<br></div>
-        <div class="content-card suit"></div>
-        <div class="bottom-card suit">${card.name}<br></div>
-      </div>
-    `;
-}
-
-Blackjack.prototype.countCards = function(dealer, card) {
-  switch(card.name) {
-    case 'A' :
-      if(dealer) {
-        this.dealerCardsCount + 11 > 21 ? this.dealerCardsCount += 1 : this.dealerCardsCount += 11;
-      } else {
-        this.playersList[0].cardsCount + 11 > 21 ? 
-        this.playersList[0].cardsCount += 1 : 
-        this.playersList[0].cardsCount += 11;
-      }
-      break;
-    case 'J' : 
-    case 'Q' : 
-    case 'K' :
-      dealer ? this.dealerCardsCount += 10 : this.playersList[0].cardsCount += 10;
-      break;
-    default  :
-      dealer ? this.dealerCardsCount += parseInt(card.name) : this.playersList[0].cardsCount += parseInt(card.name);
-      break;
-  }
-  console.log('this.dealerCardsCount', this.dealerCardsCount);
-  console.log('this.playersList[0].cardsCount', this.playersList[0].cardsCount);
-}
-
-
-Blackjack.prototype.hit = function() {
-  // Pushing new card in the player hand
-  var newCard = this.cards.shift();
-  
-  this.playersList[0].hand.push(newCard);
-
-  //print cards
-  console.log(this.playersList[0]);
-
-  var cardPosition = this.playersList[0].hand.length-1;
-  this.playerHolder.innerHTML += this.drawCards(this.playersList[0].hand[cardPosition], this.playersList[0].hand.length);
-  this.countCards(false, this.playersList[0].hand[cardPosition]);
-
-  // switch that return case values
-  var card = this.asCase(newCard.name);
-  this.playersList[0].cardsCount += card;
-
-  //increment value
-  this.playerValue.innerHTML = this.playersList[0].cardsCount;
-  
-}
-
 
 
 // TODO:   STAND, DOUBLE, SPLIT
@@ -202,26 +143,60 @@ Blackjack.prototype.playerActions = function(action) {
   }
 }
 
+Blackjack.prototype.hit = function() {
+  
+  // Pushing new card in the player hand
+  var newCard = this.deck.cards.shift();
+  
+  this.playersList[0].hand.push(newCard);
+ 
+  // switch that return case values
+  var card = this.asCase(newCard.cardnum);
+
+  this.playersList[0].cardsCount += card;  // FIX !!! VALUE, not a STRING 
+  
+  this.playerValue.innerHTML += this.deck.outputCards(this.playersList[0].cardsCount, i);
+  
+}
+
+// Blackjack.prototype.calcHandValue = function(currentHand) {
+  
+// }
+
+
 Blackjack.prototype.asCase = function(currentHand){
 
   switch(currentHand){
     case 'A': 
-      console.log('a'); return 11;
-      break;
+    console.log('a')
+      if(currentHand <= 11){
+        return 11;
+      } else {return 1}
+  
+    break;
+    case 'K': console.log('k'); return 10;
+    
+    break
+    case 'Q' : console.log('q'); return 10;
+    
+    break;
+    case 'J' : console.log('j'); return 10;
+    
+    break;
     default: return currentHand;
   }
+
+
 }
 
 
 //  DECK CONSTRUCTOR  //
 // ================== //
 
-//fix this
-function Deck(cards, suits, names, cardsCount) {
+//apply call for extend the property from Blackjack to Deck
+function Deck(cards, suits, numb, cardsCount) {
+    Blackjack.call(this, cards, suits, numb, cardsCount);
     //new properties
-  this.suits = ["spades", "hearts", "clubs", "diams"];
-  this.names = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
-  this.cards = [];
 }
 
 Deck.prototype.shuffleDeck = function(array) {
@@ -234,25 +209,38 @@ Deck.prototype.shuffleDeck = function(array) {
     return array;
 }
 
+Deck.prototype.outputCards = function(value, position) {
+    var position = (position > 0) ? position * 60 + 100 : 100;
+    //console.log('this.cards',this.cards);
+   
+    return `
+      <div class="icard ${this.cards[value].icon}" style="left:${position}px;">
+        <div class="top-card suit">${this.cards[value].cardnum}<br></div>
+        <div class="content-card suit"></div>
+        <div class="bottom-card suit">${this.cards[value].cardnum}<br></div>
+      </div>
+    `;
+}
+
 Deck.prototype.createDeck = function() {
-  var suit, color, card;
 
-  for (s in this.suits) {
-    suit  = this.suits[s][0].toUpperCase();
-    color = (suit == "S" || suit == "C") ? "black" : "red";
+    for (s in this.suits) {
+        var suit = this.suits[s][0].toUpperCase();
+        var bgcolor = (suit == "S" || suit == "C") ? "black" : "red";
 
-    for (name in this.names) {
-
-      card = {
-        suit  : suit,
-        icon  : this.suits[s],
-        color : color,
-        name  : this.names[name]
-      }
-      this.cards.push(card);
+        for (n in this.numb) {
+            var cardValue = (n > 9) ? 10 : parseInt(n) + 1
+            var card = {
+                suit: suit,
+                icon: this.suits[s],
+                bgcolor: bgcolor,
+                cardnum: this.numb[n]
+            }
+            this.cards.push(card);
+        }
     }
-  }
-};
+
+}
 
 
 
