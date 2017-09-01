@@ -47,6 +47,7 @@ Blackjack.prototype.resetGame = function() {
   document.getElementById("btnHit").disabled = false;
   document.getElementById("btnDouble").disabled = false;
   document.getElementById("btnHold").disabled = false;
+  document.getElementById("playerCoins").value=15000;
   this.startGame();
     
 }

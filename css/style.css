@@ -111,6 +111,7 @@ body{
       font-size: 30px;
       text-align: center;
       margin-top: 30px;
+      font-weight: 700;
     }
 
     #btnHold {
@@ -135,8 +136,15 @@ body{
 
     #btnStart {
       background-color: #111;
+      margin-bottom: 10px;
     }
 
     .total {
       font-size: 30px;
+      margin-bottom: 30px;
+      margin-top: 30px;
+    }
+
+    .margin-bottom{
+      margin-bottom: 10px;
     }

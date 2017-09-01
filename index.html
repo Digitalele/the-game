@@ -9,36 +9,47 @@
 </head>
 
 <body>
-    <section class="container">
+    <section class="container margin-bottom">
     <div class="row">
-        <div id="message">Press Start</div>
-        <div id="button">
-            <button id="btnStart" class="btn" type="button">
-                Start
-            </button>
-        </div>
-        <div class="total">Total € <span id="playerCoins">15000</span></div>
-        <div>Bet total
-        	<input  id="playerBet" type="number" value="0" min="1" max="1000">
-        	<button id="maxBet" type="button" onclick="" class="btn">Max Bet</button>
+    	<div class="col-md-12 text-center">
+	        <div id="message">Press Start</div>
+	        <div id="button">
+	            <button id="btnStart" class="btn" type="button">
+	                Start
+	            </button>
+	        </div>
+	        <div class="total">Total € <span id="playerCoins">15000</span></div>
+	        <div>Bet total
+	        	<input  id="playerBet" type="number" value="0" min="1" max="1000">
+	        	<button id="maxBet" type="button" onclick="" class="btn">Max Bet</button>
+	        </div>
         </div>
     </div>
         
     </section>
     <section id="board" class="container">
 	<div class="row">
-    	Dealer Hand: <span id="dValue"></span>
+	<div class="col-md-6 col-md-offset-2">
+		<div class="col-md-12">
+		<strong>Dealer Hand:</strong>
+    	<span id="dValue"></span>
     	<div id="dealerHolder"></div>
- 
-    	Player Hand: <span id="pValue"></span>
+ 		
+ 		<strong>Player Hand:</strong>
+    	<span id="pValue"></span>
     	<div id="playerHolder"></div>
 
     	<div id="playerActions">
+    		<div class="text-center">
     		<button id="btnHold" type="button" class="btn" onclick="">Stand</button>
     		<button id="btnHit" type="button" class="btn" onclick="">Hit</button>
     		<button id="btnDouble" type="button" class="btn" onclick="">Double</button>
-    	</div><br>
+    	</div></div><br>
+    	
     	<button id="btnDeal" class="btn" >Deal New</button>
+    	
+    	</div>
+    	</div>
     </div>
     </section>
 </body>
