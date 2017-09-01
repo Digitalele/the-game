@@ -1,13 +1,12 @@
 body{
   font: normal 400 20px "Arial", sans-serif;
-  background-color: #46704a;
+  background-color: #3FC380;
 }
 
 #output {
       font-size: 1.5em;
     }
 
-    #btnDeal,
     #playerActions {
       display: none;
     }
@@ -19,10 +18,11 @@ body{
       display: inline-block;
       text-align: center;
       background-color: #111;
+      margin: 10px 10px;
     }
 
-    .cover {
-      height: 160px;
+    #cover {
+      height: 170px;
       width: 120px;
       background-color: brown;
       border-radius: 10px;
@@ -32,8 +32,13 @@ body{
       z-index: 5;
     }
 
+    .notCover {
+      height: 0;
+      width: 0;
+    }
+
     .icard {
-      height: 160px;
+      height: 170px;
       width: 120px;
       padding: 3px;
       border: 1px solid black;
@@ -105,6 +110,7 @@ body{
       height: 70px;
       font-size: 30px;
       text-align: center;
+      margin-top: 30px;
     }
 
     #btnHold {
@@ -121,6 +127,10 @@ body{
 
     #maxBet {
       background-color: red;
+    }
+
+    #btnDeal {
+      background-color: #111;
     }
 
     #btnStart {

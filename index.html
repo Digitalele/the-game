@@ -4,26 +4,29 @@
 <head>
     <meta charset="utf-8">
     <title>BlackJack</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel=stylesheet href="css/style.css">
 </head>
 
 <body>
-    <section>
+    <section class="container">
+    <div class="row">
         <div id="message">Press Start</div>
         <div id="button">
             <button id="btnStart" class="btn" type="button">
                 Start
             </button>
         </div>
-        <div class="total">Total € <span id="playerCoins">0</span></div>
+        <div class="total">Total € <span id="playerCoins">15000</span></div>
         <div>Bet total
         	<input  id="playerBet" type="number" value="0" min="1" max="1000">
         	<button id="maxBet" type="button" onclick="" class="btn">Max Bet</button>
         </div>
+    </div>
         
     </section>
-    <section id="board">
-
+    <section id="board" class="container">
+	<div class="row">
     	Dealer Hand: <span id="dValue"></span>
     	<div id="dealerHolder"></div>
  
@@ -34,8 +37,9 @@
     		<button id="btnHold" type="button" class="btn" onclick="">Stand</button>
     		<button id="btnHit" type="button" class="btn" onclick="">Hit</button>
     		<button id="btnDouble" type="button" class="btn" onclick="">Double</button>
-    	</div>
-    	<button id="btnDeal" class="btn" onclick="dealNew()">Deal</button>
+    	</div><br>
+    	<button id="btnDeal" class="btn" >Deal New</button>
+    </div>
     </section>
 </body>
 <script src="js/main.js"></script>

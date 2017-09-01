@@ -32,12 +32,27 @@ function Blackjack(numberOfPlayers) {
   this.playerValue = document.getElementById("pValue");
   this.dealerValue = document.getElementById("dValue");
 
-  //bet value
+  this.btnDeal = document.getElementById("btnDeal").style.display="none";
   
 }
 
 
+Blackjack.prototype.resetGame = function() {
+  this.playersList = [];
+  this.dealerHand = [];
+  this.dealerHolder.innerHTML = '';
+  this.playerHolder.innerHTML = '';
+  this.dealerCardsCount = 0;
+  document.getElementById("btnDeal").style.display="none";
+  document.getElementById("btnHit").disabled = false;
+  document.getElementById("btnDouble").disabled = false;
+  document.getElementById("btnHold").disabled = false;
+  this.startGame();
+    
+}
+
 Blackjack.prototype.startGame = function() {
+
 
   this.deck = new Deck();
 
@@ -58,6 +73,14 @@ Blackjack.prototype.sitPlayers = function() {
   }
 }
 
+
+Blackjack.prototype.dealNew = function() {
+  var button = document.getElementById("btnDeal");
+  var that = this;
+  button.onclick = function() {
+    that.resetGame();
+  }
+}
 
 Blackjack.prototype.buttonStart = function() {
   var button = document.getElementById("btnStart");
@@ -80,11 +103,14 @@ Blackjack.prototype.buttonStand = function() {
   var button = document.getElementById("btnHold");
   var that = this;
   button.onclick = function() {
+    document.getElementById("btnHit").disabled = true;
+    document.getElementById("btnDouble").disabled = true;
+    document.getElementById("btnHold").disabled = true;
+    document.getElementById("playerBet").disabled = false;
+    document.getElementById("maxBet").disabled    = false;
     that.playerActions("stand");
   }
 }
-
-
 
 Blackjack.prototype.newGame = function() {
   var betValue = document.getElementById("playerBet").value;
@@ -107,21 +133,18 @@ Blackjack.prototype.firstHand = function() {
  
   this.dealerHolder.innerHTML = '';
   this.playerHolder.innerHTML = '';
-
-  // check later
   
-  
+  this.dealerHolder.innerHTML += '<div id="cover" style="left:220px;"></div>';
   
   for (var i = 0; i < 2; i++) {
     
-    var cover = 220;
-    this.dealerHolder.innerHTML += '<div class="cover" style="left:'+cover+'px;"></div>';
     // Dealer HAND
     this.dealerHand.push(this.cards.shift());
     this.dealerHolder.innerHTML += this.drawCards(this.dealerHand[i], this.dealerHand.length);
     this.countCards(true, this.dealerHand[i]);
 
-    this.dealerValue.innerHTML = this.dealerCardsCount;
+    //this.dealerValue.innerHTML = this.dealerCardsCount;
+    this.dealerValue.innerHTML = "?";
 
     // PLAYER HAND
     this.playersList[0].hand.push(this.cards.shift());
@@ -186,12 +209,9 @@ Blackjack.prototype.countCards = function(dealer, card) {
       this.playersList[0].cardsCount += parseInt(card.name);
       break;
   }
-
-  //console.log('this.dealerCardsCount', this.dealerCardsCount);
-  //console.log('this.playersList[0].cardsCount', this.playersList[0].cardsCount);
-  
   
 }
+
 Blackjack.prototype.asCase = function(currentHand){
   
 }
@@ -199,8 +219,15 @@ Blackjack.prototype.asCase = function(currentHand){
 Blackjack.prototype.gameOver = function(loser) {
   // player or delaer lose
   console.log(loser);
+  
+  this.dealerValue.innerHTML = this.dealerCardsCount;
 
-  this.message.innerHTML += '<span style="color:Black;">' + loser + '</span>';
+  this.message.innerHTML += '<br><span style="color:Black;">' + loser + '</span>';
+
+  
+  document.getElementById('cover').style.display = "none";
+
+  document.getElementById("btnDeal").style.display="block";
 
 }
 
@@ -228,6 +255,8 @@ Blackjack.prototype.checkWinner = function() {
 
 
 Blackjack.prototype.dealerHit = function() {
+  
+  
 
   var newCard = this.cards.shift();
 
@@ -236,11 +265,12 @@ Blackjack.prototype.dealerHit = function() {
   var cardPosition = this.dealerHand.length-1;
 
   this.dealerHolder.innerHTML += this.drawCards(this.dealerHand[cardPosition], this.dealerHand.length);
-
+  
   this.countCards(true, this.dealerHand[cardPosition]);
   console.log(this.dealerCardsCount)
 
   this.dealerValue.innerHTML = this.dealerCardsCount;
+
   
   }
 
@@ -371,5 +401,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
   bj.buttonStart();
   bj.buttonHit(); 
   bj.buttonStand();
+  bj.dealNew();
 
 });
