@@ -31,6 +31,9 @@ function Blackjack(numberOfPlayers) {
   //value
   this.playerValue = document.getElementById("pValue");
   this.dealerValue = document.getElementById("dValue");
+
+  //bet value
+  
 }
 
 
@@ -84,7 +87,6 @@ Blackjack.prototype.buttonStand = function() {
 
 
 Blackjack.prototype.newGame = function() {
-  
   var betValue = document.getElementById("playerBet").value;
 
   this.playersList[0].chips -= betValue;
@@ -107,16 +109,19 @@ Blackjack.prototype.firstHand = function() {
   this.playerHolder.innerHTML = '';
 
   // check later
-  //this.dealerHolder.innerHTML += '<div id="cover" style="left:100px;"></div>';
+  
+  
+  
   for (var i = 0; i < 2; i++) {
-
+    
+    var cover = 220;
+    this.dealerHolder.innerHTML += '<div class="cover" style="left:'+cover+'px;"></div>';
     // Dealer HAND
     this.dealerHand.push(this.cards.shift());
     this.dealerHolder.innerHTML += this.drawCards(this.dealerHand[i], this.dealerHand.length);
     this.countCards(true, this.dealerHand[i]);
 
     this.dealerValue.innerHTML = this.dealerCardsCount;
-    console.log();
 
     // PLAYER HAND
     this.playersList[0].hand.push(this.cards.shift());
@@ -124,6 +129,19 @@ Blackjack.prototype.firstHand = function() {
     this.countCards(false, this.playersList[0].hand[i]);
 
     this.playerValue.innerHTML = this.playersList[0].cardsCount;
+    console.log(this.playersList[0].cardsCount);
+    console.log(this.dealerHand.length);
+    console.log(this.playersList[0].hand.length);
+    if (this.playersList[0].cardsCount == 21 && this.playersList[0].hand.length == 2){
+      console.log('BlackJack Player')
+      this.gameOver('BlackJack Player');
+
+    } else if(this.dealerCardsCount == 21 && this.dealerHand.length == 2){
+      console.log('BlackJack Dealer');
+      this.gameOver('BlackJack Dealer');
+    } else if ((this.playersList[0].cardsCount == 21 && this.playersList[0].hand.length == 2) && (this.dealerCardsCount == 21 && this.dealerHand.length == 2))
+    {this.gameOver('PUSH!')}
+
   }
   console.log('dealer hand', this.dealerHand)
   console.log('player hand', this.playersList)
@@ -133,7 +151,6 @@ Blackjack.prototype.firstHand = function() {
 Blackjack.prototype.drawCards = function(card, position) {
     var position = (position > 0) ? position * 60 + 100 : 100;
     //console.log('this.cards',this.cards);
-   
     return `
       <div class="icard ${card.icon}" style="left:${position}px;">
         <div class="top-card suit">${card.name}<br></div>
@@ -172,30 +189,45 @@ Blackjack.prototype.countCards = function(dealer, card) {
 
   //console.log('this.dealerCardsCount', this.dealerCardsCount);
   //console.log('this.playersList[0].cardsCount', this.playersList[0].cardsCount);
-  this.playersList[0].cardsCount > 21 ? this.gameOver() : false;
+  
+  
 }
 Blackjack.prototype.asCase = function(currentHand){
   
 }
 
-Blackjack.prototype.gameOver = function() {
-  // if(this.playersList[0].cardsCount === 21 || this.playersList[0].cardsCount){
+Blackjack.prototype.gameOver = function(loser) {
+  // player or delaer lose
+  console.log(loser);
 
-  // }
-  console.log('LOSER');
+  this.message.innerHTML += '<span style="color:Black;">' + loser + '</span>';
+
 }
 
-Blackjack.prototype.checkForTheWinner = function() {
-  console.log('checking winner');
-  // var playervalue = countCards(false, this.playersList[0].hand[i]);
-  // if (playervalue === 21 && this.playersList[0].hand.length == 2) {
-  //   this.message.innerHTML = "Player Blackjack";
-  // }
+Blackjack.prototype.checkWinner = function() {
+
+  var betValue = document.getElementById("playerBet").value;
+  
+  if ((this.playersList[0].cardsCount < 22 && this.dealerCardsCount < this.playersList[0].cardsCount) || (this.dealerCardsCount > 21 && this.playersList[0].cardsCount < 22)) {
+    //this.message.innerHTML += '<span style="color:green;">You WIN!  You won $' + betValue + '</span>';
+    this.gameOver('You Win!');
+
+  } else if (this.playersList[0].cardsCount > 21) {
+
+    this.gameOver('You Lose!');
+    
+  } else if(this.dealerCardsCount > 21){
+    this.gameOver('You Win!');
+
+  } else if (this.playersList[0].cardsCount == this.dealerCardsCount) {
+    this.gameOver('Push!');
+    
+  } else {this.gameOver('You Lose!');}
+
 }
 
 
 Blackjack.prototype.dealerHit = function() {
-  console.log('hit')
 
   var newCard = this.cards.shift();
 
@@ -209,36 +241,41 @@ Blackjack.prototype.dealerHit = function() {
   console.log(this.dealerCardsCount)
 
   this.dealerValue.innerHTML = this.dealerCardsCount;
-
-}
+  
+  }
 
 
 Blackjack.prototype.stand = function() {
-  //  while (this.dealerCardsCount < 17) {
-  //   this.dealerHit()
-  // }
+   while (this.dealerCardsCount < 17) {
+    this.dealerHit()
+    console.log('Test');
+  } 
+
+  if(this.dealerCardsCount >= 17){
+    this.checkWinner();
+  }
   
 }
 
 
 Blackjack.prototype.hit = function() {
-  // Pushing new card in the player hand
+
   var newCard = this.cards.shift();
   
   this.playersList[0].hand.push(newCard);
-
-  //print cards
-  console.log(this.playersList[0].hand.length);
 
   var cardPosition = this.playersList[0].hand.length-1;
 
   this.playerHolder.innerHTML += this.drawCards(this.playersList[0].hand[cardPosition], this.playersList[0].hand.length);
   this.countCards(false, this.playersList[0].hand[cardPosition]);
 
-
   //increment value
   this.playerValue.innerHTML = this.playersList[0].cardsCount;
-  
+
+  if(this.playersList[0].cardsCount > 21){
+    this.gameOver('You Lose!');
+  }
+
 }
 
 
@@ -251,7 +288,7 @@ Blackjack.prototype.playerActions = function(action) {
     break;
 
     case 'stand':
-    this.dealerHit();
+    this.stand();
     //playEnd();
     break;
 

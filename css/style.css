@@ -21,7 +21,7 @@ body{
       background-color: #111;
     }
 
-    #cover {
+    .cover {
       height: 160px;
       width: 120px;
       background-color: brown;
@@ -29,6 +29,7 @@ body{
       position: absolute;
       border: 1px solid black;
       padding: 3px;
+      z-index: 5;
     }
 
     .icard {
